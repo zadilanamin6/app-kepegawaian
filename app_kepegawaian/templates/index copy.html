@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Aplikasi Kepegawaian</title>
+</head>
+<body>
+
+<h2>Input Data Pegawai</h2>
+
+<form method="post" enctype="multipart/form-data">
+    Nama: <input type="text" name="nama"><br><br>
+    NIP: <input type="text" name="nip"><br><br>
+    Jabatan: <input type="text" name="jabatan"><br><br>
+    <button type="submit">Simpan</button>
+    File: <input type="file" name="file"
+    file = request.files["file"]
+filename = ""
+
+if file and allowed_file(file.filename):
+    ext = file.filename.rsplit(".", 1)[1].lower()
+    filename = secure_filename(f"{nama}_{datetime.now().strftime('%Y%m%d%H%M%S')}.{ext}")
+    file.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
+    
+File (PDF/DOC/DOCX): <input type="file" name="file"><br><br>
+
+</form>
+
+<h2>Data Pegawai</h2>
+
+<table border="1">
+    <tr>
+        <th>No</th>
+        <th>Nama</th>
+        <th>NIP</th>
+        <th>Jabatan</th>
+        <th>Aksi</th>
+        <th>Dokumen</th>
+    </tr>
+
+    {% for d in data %}
+    <tr>
+        <td>{{ loop.index }}</td>
+        <td>{{ d.nama }}</td>
+        <td>{{ d.nip }}</td>
+        <td>{{ d.jabatan }}</td>
+        <td>
+            <a href="/edit/{{ d.id }}">Edit</a> |
+            <a href="/hapus/{{ d.id }}" onclick="return confirm('Yakin hapus?')">Hapus</a>
+        </td>
+<td>
+    {% if d.file %}
+        <a href="/uploads/{{ d.file }}" target="_blank">📄 Lihat</a>
+    {% else %}
+        Tidak ada
+    {% endif %}
+</td>
+    </tr>
+    {% endfor %}
+</table>
+
+</body>
+</html>
